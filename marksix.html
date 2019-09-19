@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>49码组合</title>
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/runner56/jquery-easyui@1.8.1/themes/default/easyui.css" /> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/runner56/jquery-easyui@1.8.1/themes/metro/easyui.css">  
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/runner56/jquery-easyui@1.8.1/themes/mobile.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/runner56/jquery-easyui@1.8.1/themes/color.css"> 
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/runner56/jquery-easyui@1.8.1/themes/icon.css">  
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/runner56/jquery-easyui@1.8.1/demo/demo.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/runner56/jquery-easyui@1.8.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/runner56/jquery-easyui@1.8.1/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/runner56/jquery-easyui@1.8.1/jquery.easyui.mobile.js"></script>
+</head>
+<body>
+    
+    <div class="easyui-navpanel">
+        <header>
+            <div class="m-toolbar">
+                <div class="m-title">49码组合</div>
+            </div>
+        </header>
+        <form id="ff">
+        </form>
+        <div style="margin: 30px 0 0 15px">
+            <select id="cc" class="easyui-combobox" name="dept" style="width:200px;">
+                <option value="2">组合二</option>
+                <option value="3" selected="true">组合三</option>
+                <option value="4">组合四</option>
+                <option value="5">组合五</option>
+                <option value="6">组合六</option>
+            </select>
+        </div>
+        <div style="text-align:center;margin-top:30px">
+            <a href="javascript:void(0)" class="easyui-linkbutton c1" style="width:100%" onclick="generateCombination()">
+                <span style="font-size:16px">生成组合</span>
+            </a>
+        </div>
+    </div>
+    <div id="p2" class="easyui-navpanel">
+        <header>
+            <div class="m-toolbar">
+                <div class="m-title">组合结果</div>
+                <div class="m-left">
+                    <a href="#" class="easyui-linkbutton m-back" data-options="plain:true,back:true">返回</a>
+                </div>
+            </div>
+        </header>
+        <div></div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/js-combinatorics@0.5"></script>
+<script type="text/javascript">
+    (function(){
+        var form = document.querySelectorAll("form")[0];
+        for (var i = 1; i <= 49; i++) {
+            var div = document.createElement("div");
+            div.setAttribute("style", "margin-left: 15px;display: inline-block; margin-top: 8px");
+            var input = document.createElement("input");
+            input.setAttribute("class", "easyui-checkbox");
+            input.setAttribute("name", "num");
+            input.setAttribute("id", "c"+i);
+            input.setAttribute("value", i);
+            input.setAttribute("label", i);
+            input.setAttribute("labelWidth", 25);
+            div.appendChild(input);
+            form.appendChild(div);
+        }
+    })();
+    var generateCombination = function(){
+        $.messager.progress();
+        var arr = [];
+        for(var i=1; i<=49; i++){
+            var options = $("#c"+i).checkbox("options");
+            if(options.checked){
+                arr.push(i);
+            }
+        }
+        var len = $("#cc").combobox("getValue");
+        $.mobile.go('#p2');
+        var cmb = Combinatorics.bigCombination(arr, len);
+
+        var outer = $("#p2>div")[0];
+        var j = 1;
+        var a;
+        console.log(cmb.length);
+        while(a = cmb.next()){
+            var div = document.createElement("div");
+            div.setAttribute("style", "margin-left: 12px;display: inline-block; margin-top: 8px");
+            var input = document.createElement("input");
+            input.setAttribute("id", "b"+j);
+            div.appendChild(input);
+            outer.appendChild(div);
+            $("#b"+j).textbox({
+                width: 100,
+                labelWidth: 32,
+                label: j
+            });
+            $("#b"+j).textbox("setText", a);
+            j += 1;
+        }
+        $.messager.progress("close");
+    }
+</script>
+</html>
+
+<script type="text/javascript">
+    var a = [];
+    for (var i = 1; i <= 49; i++) {
+        a.push(i);
+    }
+    cmb = Combinatorics.bigCombination(a, 2);
+    var l = 0;
+    console.log(cmb.length);
+</script>
